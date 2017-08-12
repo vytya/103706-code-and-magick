@@ -11,7 +11,7 @@ window.renderStatistics = function(ctx, names, times) {
     'shadowIndent': 10,
     'fontStyle': '16px PT Mono',
     'winnerText': 'Ура вы победили!',
-    'resultListText':  'Список результатов:',
+    'resultListText': 'Список результатов:',
     'textColor': '#000',
     'textIndent': 20,
   };
@@ -36,7 +36,7 @@ window.renderStatistics = function(ctx, names, times) {
 
   // Render text
   ctx.font = statisticCloud.fontStyle;
-  ctx.textBaseline = "top";
+  ctx.textBaseline = 'top';
   ctx.fillStyle = statisticCloud.textColor;
   ctx.fillText(
     statisticCloud.winnerText,
@@ -64,16 +64,14 @@ window.renderStatistics = function(ctx, names, times) {
 
   // Get max time & max time array key
   var maxTime = 0;
-  var maxTimeKey;
 
-  for (var i = 0; i < times.length; i ++) {
+  for (var i = 0; i < times.length; i++) {
     if (maxTime < times[i]) {
-      maxTime    = times[i];
-      maxTimeKey = i;
+      maxTime = times[i];
     }
   }
 
-  for (var i = 0; i < names.length; i ++) {
+  for (var j = 0; j < names.length; j++) {
     var time = Math.floor(times[i]);
 
     // Count each column % from 100% max time
@@ -101,7 +99,7 @@ window.renderStatistics = function(ctx, names, times) {
 
     ctx.fillStyle = statisticCloud.textColor;
 
-    ctx.textBaseline = "bottom";
+    ctx.textBaseline = 'bottom';
     // Draw time
     ctx.fillText(
       time,
@@ -109,13 +107,12 @@ window.renderStatistics = function(ctx, names, times) {
       eachColumnYCoord - hystogram.textYIndent
     );
 
-    ctx.textBaseline = "top";
+    ctx.textBaseline = 'top';
     // Draw name
     ctx.fillText(
       names[i],
       eachColumnXCoord,
       hystogram.indentCoordY + hystogram.columnHeight + hystogram.textYIndent
     );
-  }
-
-}
+  };
+};
