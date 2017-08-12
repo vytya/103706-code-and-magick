@@ -1,6 +1,6 @@
 'use strict';
 
-window.renderStatistics = function(ctx, names, times) {
+window.renderStatistics = function (ctx, names, times) {
   var statisticCloud = {
     'coordX': 100,
     'coordY': 10,
@@ -18,36 +18,20 @@ window.renderStatistics = function(ctx, names, times) {
 
   // Draw shadow with indent
   ctx.fillStyle = statisticCloud.shadowColor;
-  ctx.fillRect(
-    statisticCloud.coordX + statisticCloud.shadowIndent,
-    statisticCloud.coordY + statisticCloud.shadowIndent,
-    statisticCloud.width,
-    statisticCloud.height
-  );
+  ctx.fillRect(statisticCloud.coordX + statisticCloud.shadowIndent, statisticCloud.coordY + statisticCloud.shadowIndent, statisticCloud.width, statisticCloud.height);
 
   // Draw face
   ctx.fillStyle = statisticCloud.mainColor;
-  ctx.fillRect(
-    statisticCloud.coordX,
-    statisticCloud.coordY,
-    statisticCloud.width,
-    statisticCloud.height
-  );
+  ctx.fillRect(statisticCloud.coordX, statisticCloud.coordY, statisticCloud.width,  statisticCloud.height);
 
   // Render text
   ctx.font = statisticCloud.fontStyle;
   ctx.textBaseline = 'top';
   ctx.fillStyle = statisticCloud.textColor;
-  ctx.fillText(
-    statisticCloud.winnerText,
-    statisticCloud.coordX + statisticCloud.textIndent,
-    statisticCloud.coordY + statisticCloud.textIndent
-  );
-  ctx.fillText(
-    statisticCloud.resultListText,
-    statisticCloud.coordX + statisticCloud.textIndent,
-    statisticCloud.coordY + statisticCloud.textIndent * 2
-  );
+
+  ctx.fillText(statisticCloud.winnerText, statisticCloud.coordX + statisticCloud.textIndent, statisticCloud.coordY + statisticCloud.textIndent);
+
+  ctx.fillText(statisticCloud.resultListText, statisticCloud.coordX + statisticCloud.textIndent, statisticCloud.coordY + statisticCloud.textIndent * 2);
 
   /*
   * Render hystogram columns
@@ -90,29 +74,16 @@ window.renderStatistics = function(ctx, names, times) {
     }
 
     // Draw column
-    ctx.fillRect(
-      eachColumnXCoord,
-      eachColumnYCoord,
-      hystogram.columnWidth,
-      hystogram.columnHeight * columnPercentHeight / 100
-    );
+    ctx.fillRect(eachColumnXCoord, eachColumnYCoord, hystogram.columnWidth, hystogram.columnHeight * columnPercentHeight / 100);
 
     ctx.fillStyle = statisticCloud.textColor;
 
-    ctx.textBaseline = 'bottom';
     // Draw time
-    ctx.fillText(
-      time,
-      eachColumnXCoord,
-      eachColumnYCoord - hystogram.textYIndent
-    );
+    ctx.textBaseline = 'bottom';
+    ctx.fillText(time, eachColumnXCoord, eachColumnYCoord - hystogram.textYIndent);
 
-    ctx.textBaseline = 'top';
     // Draw name
-    ctx.fillText(
-      names[i],
-      eachColumnXCoord,
-      hystogram.indentCoordY + hystogram.columnHeight + hystogram.textYIndent
-    );
+    ctx.textBaseline = 'top';
+    ctx.fillText(names[i], eachColumnXCoord, hystogram.indentCoordY + hystogram.columnHeight + hystogram.textYIndent);
   };
 };
