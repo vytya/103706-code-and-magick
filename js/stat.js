@@ -22,7 +22,7 @@ window.renderStatistics = function (ctx, names, times) {
 
   // Draw face
   ctx.fillStyle = statisticCloud.mainColor;
-  ctx.fillRect(statisticCloud.coordX, statisticCloud.coordY, statisticCloud.width,  statisticCloud.height);
+  ctx.fillRect(statisticCloud.coordX, statisticCloud.coordY, statisticCloud.width, statisticCloud.height);
 
   // Render text
   ctx.font = statisticCloud.fontStyle;
@@ -65,7 +65,7 @@ window.renderStatistics = function (ctx, names, times) {
     var eachColumnXCoord = hystogram.indentCoordX + (i * hystogram.columnsIndent) + (i * hystogram.columnWidth);
 
     // Count each column Y coordinate of begining
-    var eachColumnYCoord = hystogram.indentCoordY + (hystogram.columnHeight * (100 - columnPercentHeight)/100);
+    var eachColumnYCoord = hystogram.indentCoordY + (hystogram.columnHeight * (100 - columnPercentHeight) / 100);
 
     ctx.fillStyle = 'rgba(0, 18, 255, ' + Math.random() + ')';
 
@@ -85,5 +85,5 @@ window.renderStatistics = function (ctx, names, times) {
     // Draw name
     ctx.textBaseline = 'top';
     ctx.fillText(names[i], eachColumnXCoord, hystogram.indentCoordY + hystogram.columnHeight + hystogram.textYIndent);
-  };
+  }
 };
