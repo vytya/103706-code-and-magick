@@ -56,7 +56,7 @@ window.renderStatistics = function (ctx, names, times) {
   drawRectangle(statisticCloud.coordX + statisticCloud.shadowIndent, statisticCloud.coordY + statisticCloud.shadowIndent, statisticCloud.width, statisticCloud.height, statisticCloud.shadowColor);
 
   // Draw face
-  drawRectangle(statisticCloud.coordX, statisticCloud.coordY, statisticCloud.width, statisticCloud.height, statisticCloud.mainColor)
+  drawRectangle(statisticCloud.coordX, statisticCloud.coordY, statisticCloud.width, statisticCloud.height, statisticCloud.mainColor);
 
   // Render text
   ctx.font = statisticCloud.fontStyle;
