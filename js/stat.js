@@ -98,9 +98,9 @@ window.renderStatistics = function (ctx, names, times) {
     drawHystogramColumn(eachColumnXCoord, eachColumnYCoord, hystogram.columnWidth, hystogram.columnHeight * columnPercentHeight / 100, getRandomBlueColor(names[i]));
 
     // Draw time
-    drawText(time, eachColumnXCoord, eachColumnYCoord - hystogram.textYIndent, 'bottom', statisticCloud.textColor);
+    drawText(time, eachColumnXCoord, eachColumnYCoord - hystogram.textYIndent, 'bottom', getRandomBlueColor(names[i]));
 
     // Draw name
-    drawText(names[i], eachColumnXCoord, hystogram.indentCoordY + hystogram.columnHeight + hystogram.textYIndent, 'top', statisticCloud.textColor);
+    drawText(names[i], eachColumnXCoord, hystogram.indentCoordY + hystogram.columnHeight + hystogram.textYIndent, 'top', getRandomBlueColor(names[i]));
   }
 };
