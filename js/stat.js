@@ -16,42 +16,6 @@ window.renderStatistics = function (ctx, names, times) {
     'textIndent': 20,
   };
 
-  // Draw text messages
-  var drawText = function (text, coordX, coordY, textBaseline, color) {
-    ctx.textBaseline = textBaseline;
-    ctx.fillStyle = color;
-
-    ctx.fillText(text, coordX, coordY);
-  };
-
-  // Draw shadow with indent
-  ctx.fillStyle = statisticCloud.shadowColor;
-  ctx.fillRect(statisticCloud.coordX + statisticCloud.shadowIndent, statisticCloud.coordY + statisticCloud.shadowIndent, statisticCloud.width, statisticCloud.height);
-
-  // Draw face
-  ctx.fillStyle = statisticCloud.mainColor;
-  ctx.fillRect(statisticCloud.coordX, statisticCloud.coordY, statisticCloud.width, statisticCloud.height);
-
-  // Render text
-  ctx.font = statisticCloud.fontStyle;
-
-  drawText(statisticCloud.winnerText, statisticCloud.coordX + statisticCloud.textIndent, statisticCloud.coordY + statisticCloud.textIndent, 'top', statisticCloud.textColor);
-
-  drawText(statisticCloud.resultListText, statisticCloud.coordX + statisticCloud.textIndent, statisticCloud.coordY + statisticCloud.textIndent * 2, 'top', statisticCloud.textColor);
-
-  /*
-  * Render hystogram columns
-  *
-  */
-  var hystogram = {
-    'indentCoordX': 120,
-    'indentCoordY': 100,
-    'columnHeight': 150,
-    'columnWidth': 40,
-    'columnsIndent': 50,
-    'textYIndent': 10,
-  };
-
   // Get random color depends from item
   var getRandomBlueColor = function (item) {
     if (item === 'Вы') {
@@ -74,13 +38,47 @@ window.renderStatistics = function (ctx, names, times) {
     return maxTime;
   };
 
-  var maxTime = getMaxTime(times);
-
-  // Draw hystogram column
-  var drawHystogramColumn = function (coordX, coordY, width, height, color) {
+  // Draw rectangle
+  var drawRectangle = function (coordX, coordY, width, height, color) {
     ctx.fillStyle = color;
     ctx.fillRect(coordX, coordY, width, height);
   };
+
+  // Draw text messages
+  var drawText = function (text, coordX, coordY, textBaseline, color) {
+    ctx.textBaseline = textBaseline;
+    ctx.fillStyle = color;
+
+    ctx.fillText(text, coordX, coordY);
+  };
+
+  // Draw shadow with indent
+  drawRectangle(statisticCloud.coordX + statisticCloud.shadowIndent, statisticCloud.coordY + statisticCloud.shadowIndent, statisticCloud.width, statisticCloud.height, statisticCloud.shadowColor);
+
+  // Draw face
+  drawRectangle(statisticCloud.coordX, statisticCloud.coordY, statisticCloud.width, statisticCloud.height, statisticCloud.mainColor)
+
+  // Render text
+  ctx.font = statisticCloud.fontStyle;
+
+  drawText(statisticCloud.winnerText, statisticCloud.coordX + statisticCloud.textIndent, statisticCloud.coordY + statisticCloud.textIndent, 'top', statisticCloud.textColor);
+
+  drawText(statisticCloud.resultListText, statisticCloud.coordX + statisticCloud.textIndent, statisticCloud.coordY + statisticCloud.textIndent * 2, 'top', statisticCloud.textColor);
+
+  /*
+  * Render hystogram columns
+  *
+  */
+  var hystogram = {
+    'indentCoordX': 120,
+    'indentCoordY': 100,
+    'columnHeight': 150,
+    'columnWidth': 40,
+    'columnsIndent': 50,
+    'textYIndent': 10,
+  };
+
+  var maxTime = getMaxTime(times);
 
   for (var i = 0; i < names.length; i++) {
     var time = Math.floor(times[i]);
@@ -95,7 +93,7 @@ window.renderStatistics = function (ctx, names, times) {
     var eachColumnYCoord = hystogram.indentCoordY + (hystogram.columnHeight * (100 - columnPercentHeight) / 100);
 
     // Draw column
-    drawHystogramColumn(eachColumnXCoord, eachColumnYCoord, hystogram.columnWidth, hystogram.columnHeight * columnPercentHeight / 100, getRandomBlueColor(names[i]));
+    drawRectangle(eachColumnXCoord, eachColumnYCoord, hystogram.columnWidth, hystogram.columnHeight * columnPercentHeight / 100, getRandomBlueColor(names[i]));
 
     // Draw time
     drawText(time, eachColumnXCoord, eachColumnYCoord - hystogram.textYIndent, 'bottom', getRandomBlueColor(names[i]));
