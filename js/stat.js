@@ -16,6 +16,14 @@ window.renderStatistics = function (ctx, names, times) {
     'textIndent': 20,
   };
 
+  // Draw text messages
+  var drawText = function (text, coordX, coordY, textBaseline, color) {
+    ctx.textBaseline = textBaseline;
+    ctx.fillStyle = color;
+
+    ctx.fillText(text, coordX, coordY);
+  };
+
   // Draw shadow with indent
   ctx.fillStyle = statisticCloud.shadowColor;
   ctx.fillRect(statisticCloud.coordX + statisticCloud.shadowIndent, statisticCloud.coordY + statisticCloud.shadowIndent, statisticCloud.width, statisticCloud.height);
@@ -26,12 +34,10 @@ window.renderStatistics = function (ctx, names, times) {
 
   // Render text
   ctx.font = statisticCloud.fontStyle;
-  ctx.textBaseline = 'top';
-  ctx.fillStyle = statisticCloud.textColor;
 
-  ctx.fillText(statisticCloud.winnerText, statisticCloud.coordX + statisticCloud.textIndent, statisticCloud.coordY + statisticCloud.textIndent);
+  drawText(statisticCloud.winnerText, statisticCloud.coordX + statisticCloud.textIndent, statisticCloud.coordY + statisticCloud.textIndent, 'top', statisticCloud.textColor);
 
-  ctx.fillText(statisticCloud.resultListText, statisticCloud.coordX + statisticCloud.textIndent, statisticCloud.coordY + statisticCloud.textIndent * 2);
+  drawText(statisticCloud.resultListText, statisticCloud.coordX + statisticCloud.textIndent, statisticCloud.coordY + statisticCloud.textIndent * 2, 'top', statisticCloud.textColor);
 
   /*
   * Render hystogram columns
@@ -46,16 +52,37 @@ window.renderStatistics = function (ctx, names, times) {
     'textYIndent': 10,
   };
 
-  // Get max time & max time array key
-  var maxTime = 0;
-
-  for (var i = 0; i < times.length; i++) {
-    if (maxTime < times[i]) {
-      maxTime = times[i];
+  // Get random color depends from item
+  var getRandomBlueColor = function (item) {
+    if (item === 'Вы') {
+      return 'rgba(255, 0, 0, 1)';
+    } else {
+      return 'rgba(0, 18, 255, ' + Math.random() + ')';
     }
-  }
+  };
 
-  for (var j = 0; j < names.length; j++) {
+  // Get max time from time array
+  var getMaxTime = function (timesArray) {
+    var maxTime = 0;
+
+    for (var i = 0; i < timesArray.length; i++) {
+      if (maxTime < timesArray[i]) {
+        maxTime = Math.floor(timesArray[i]);
+      }
+    }
+
+    return maxTime;
+  };
+
+  var maxTime = getMaxTime(times);
+
+  // Draw hystogram column
+  var drawHystogramColumn = function (coordX, coordY, width, height, color) {
+    ctx.fillStyle = color;
+    ctx.fillRect(coordX, coordY, width, height);
+  };
+
+  for (var i = 0; i < names.length; i++) {
     var time = Math.floor(times[i]);
 
     // Count each column % from 100% max time
@@ -67,23 +94,13 @@ window.renderStatistics = function (ctx, names, times) {
     // Count each column Y coordinate of begining
     var eachColumnYCoord = hystogram.indentCoordY + (hystogram.columnHeight * (100 - columnPercentHeight) / 100);
 
-    ctx.fillStyle = 'rgba(0, 18, 255, ' + Math.random() + ')';
-
-    if (names[i] === 'Вы') {
-      ctx.fillStyle = 'rgba(255, 0, 0, 1)';
-    }
-
     // Draw column
-    ctx.fillRect(eachColumnXCoord, eachColumnYCoord, hystogram.columnWidth, hystogram.columnHeight * columnPercentHeight / 100);
-
-    ctx.fillStyle = statisticCloud.textColor;
+    drawHystogramColumn(eachColumnXCoord, eachColumnYCoord, hystogram.columnWidth, hystogram.columnHeight * columnPercentHeight / 100, getRandomBlueColor(names[i]));
 
     // Draw time
-    ctx.textBaseline = 'bottom';
-    ctx.fillText(time, eachColumnXCoord, eachColumnYCoord - hystogram.textYIndent);
+    drawText(time, eachColumnXCoord, eachColumnYCoord - hystogram.textYIndent, 'bottom', statisticCloud.textColor);
 
     // Draw name
-    ctx.textBaseline = 'top';
-    ctx.fillText(names[i], eachColumnXCoord, hystogram.indentCoordY + hystogram.columnHeight + hystogram.textYIndent);
+    drawText(names[i], eachColumnXCoord, hystogram.indentCoordY + hystogram.columnHeight + hystogram.textYIndent, 'top', statisticCloud.textColor);
   }
 };
