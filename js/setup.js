@@ -62,11 +62,10 @@ var similarWizardTemplate = document.querySelector('#similar-wizard-template').c
 
 // Fill block with data
 var fillData = function (clonedNode, selector, type, value) {
-  
   if (type === 'text') {
-    return clonedNode.querySelector(selector).textContent = value;
+    clonedNode.querySelector(selector).textContent = value;
   } else {
-    return clonedNode.querySelector(selector).style.fill = value;
+    clonedNode.querySelector(selector).style.fill = value;
   }
 };
 
