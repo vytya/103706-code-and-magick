@@ -1,21 +1,5 @@
 'use strict';
 
-var removeHiddenClass = function (hiddenblock) {
-  var hiddenBlock = document.querySelector(hiddenblock);
-
-  if (hiddenBlock !== null && hiddenBlock.classList.contains('hidden')) {
-    hiddenBlock.classList.remove('hidden');
-  }
-};
-
-// Random function with min & max from array
-var getMinMaxRandomFromArray = function (array) {
-  return Math.floor(Math.random() * array.length);
-};
-
-// Remove .hidden at .setup
-removeHiddenClass('.setup');
-
 // Constants
 var NAMES = [
   'Иван',
@@ -56,6 +40,70 @@ var EYESCOLORS = [
   'green'
 ];
 
+var KEY_CODES = {
+  escape: 27,
+  enter: 13
+};
+
+var removeHiddenClass = function (hiddenblock) {
+  var hiddenBlock = document.querySelector(hiddenblock);
+
+  if (hiddenBlock !== null && hiddenBlock.classList.contains('hidden')) {
+    hiddenBlock.classList.remove('hidden');
+  }
+};
+
+// Random function with min & max from array
+var getRandomElementFromArray = function (array) {
+  var randomElement = Math.floor(Math.random() * array.length);
+
+  return array[randomElement];
+};
+
+// Open / hide setup
+var setupOpen = document.querySelector('.setup-open');
+var setupClose = document.querySelector('.setup-close');
+var setupSubmit = document.querySelector('.setup-submit');
+var setup = document.querySelector('.setup');
+
+var onPopupEscPress = function (event) {
+  if (event.keyCode === KEY_CODES.escape) {
+    setup.classList.add('hidden');
+  }
+};
+
+var onPopupEnterPress = function (event) {
+  if (event.keyCode === KEY_CODES.enter) {
+    if (setup.classList.contains('hidden')) {
+      setup.classList.remove('hidden');
+    } else {
+      setup.classList.add('hidden');
+    }
+  }
+};
+
+// Open
+var openPopup = function () {
+  setup.classList.remove('hidden');
+
+  document.addEventListener('keydown', onPopupEscPress);
+};
+
+setupOpen.addEventListener('click', openPopup);
+setupOpen.addEventListener('keydown', onPopupEnterPress);
+
+
+// Close
+var closePopup = function () {
+  setup.classList.add('hidden');
+};
+
+setupClose.addEventListener('click', closePopup);
+setupClose.addEventListener('keydown', onPopupEnterPress);
+
+setupSubmit.addEventListener('click', closePopup);
+setupSubmit.addEventListener('keydown', onPopupEnterPress);
+
 // Template
 var similarListElement = document.querySelector('.setup-similar-list');
 var similarWizardTemplate = document.querySelector('#similar-wizard-template').content;
@@ -64,8 +112,10 @@ var similarWizardTemplate = document.querySelector('#similar-wizard-template').c
 var fillData = function (clonedNode, selector, type, value) {
   if (type === 'text') {
     clonedNode.querySelector(selector).textContent = value;
-  } else {
+  } else if (type === 'fill') {
     clonedNode.querySelector(selector).style.fill = value;
+  } else {
+    throw new Error('parameter "fill" must be equal to "text" or "fill"');
   }
 };
 
@@ -85,9 +135,9 @@ var fragment = document.createDocumentFragment();
 
 for (var i = 0; i < 4; i++) {
   var wizard = {
-    'name': NAMES[getMinMaxRandomFromArray(NAMES)] + ' ' + SURNAMES[getMinMaxRandomFromArray(SURNAMES)],
-    'coatColor': COATCOLORS[getMinMaxRandomFromArray(COATCOLORS)],
-    'eyesColor': EYESCOLORS[getMinMaxRandomFromArray(EYESCOLORS)]
+    'name': getRandomElementFromArray(NAMES) + ' ' + getRandomElementFromArray(SURNAMES),
+    'coatColor': getRandomElementFromArray(COATCOLORS),
+    'eyesColor': getRandomElementFromArray(EYESCOLORS)
   };
 
   fragment.appendChild(renderWizard(wizard));
