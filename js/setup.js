@@ -23,7 +23,7 @@ var SURNAMES = [
   'Ирвинг'
 ];
 
-var COATCOLORS = [
+var COAT_COLORS = [
   'rgb(101, 137, 164)',
   'rgb(241, 43, 107)',
   'rgb(146, 100, 161)',
@@ -32,7 +32,7 @@ var COATCOLORS = [
   'rgb(0, 0, 0)'
 ];
 
-var EYESCOLORS = [
+var EYES_COLORS = [
   'black',
   'red',
   'blue',
@@ -45,6 +45,7 @@ var KEY_CODES = {
   enter: 13
 };
 
+// Check for hidden class is on block & remove it form block if it exist
 var removeHiddenClass = function (hiddenblock) {
   var hiddenBlock = document.querySelector(hiddenblock);
 
@@ -58,6 +59,17 @@ var getRandomElementFromArray = function (array) {
   var randomElement = Math.floor(Math.random() * array.length);
 
   return array[randomElement];
+};
+
+// Fill block with data
+var fillData = function (clonedNode, selector, type, value) {
+  if (type === 'text') {
+    clonedNode.querySelector(selector).textContent = value;
+  } else if (type === 'fill') {
+    clonedNode.querySelector(selector).style.fill = value;
+  } else {
+    throw new Error('parameter "fill" must be equal to "text" or "fill"');
+  }
 };
 
 // Open / hide setup
@@ -92,7 +104,6 @@ var openPopup = function () {
 setupOpen.addEventListener('click', openPopup);
 setupOpen.addEventListener('keydown', onPopupEnterPress);
 
-
 // Close
 var closePopup = function () {
   setup.classList.add('hidden');
@@ -104,20 +115,19 @@ setupClose.addEventListener('keydown', onPopupEnterPress);
 setupSubmit.addEventListener('click', closePopup);
 setupSubmit.addEventListener('keydown', onPopupEnterPress);
 
+// Skin change
+var setupWizard = document.querySelector('.setup-wizard');
+var setupWizardCoat = setupWizard.querySelector('.wizard-coat');
+
+var onPopupChangeWizardCoat = function () {
+  fillData(setupWizard, '.wizard-coat', 'fill', getRandomElementFromArray(COAT_COLORS));
+};
+
+setupWizardCoat.addEventListener('click', onPopupChangeWizardCoat);
+
 // Template
 var similarListElement = document.querySelector('.setup-similar-list');
 var similarWizardTemplate = document.querySelector('#similar-wizard-template').content;
-
-// Fill block with data
-var fillData = function (clonedNode, selector, type, value) {
-  if (type === 'text') {
-    clonedNode.querySelector(selector).textContent = value;
-  } else if (type === 'fill') {
-    clonedNode.querySelector(selector).style.fill = value;
-  } else {
-    throw new Error('parameter "fill" must be equal to "text" or "fill"');
-  }
-};
 
 // Render wizard func
 var renderWizard = function (wizard) {
@@ -136,8 +146,8 @@ var fragment = document.createDocumentFragment();
 for (var i = 0; i < 4; i++) {
   var wizard = {
     'name': getRandomElementFromArray(NAMES) + ' ' + getRandomElementFromArray(SURNAMES),
-    'coatColor': getRandomElementFromArray(COATCOLORS),
-    'eyesColor': getRandomElementFromArray(EYESCOLORS)
+    'coatColor': getRandomElementFromArray(COAT_COLORS),
+    'eyesColor': getRandomElementFromArray(EYES_COLORS)
   };
 
   fragment.appendChild(renderWizard(wizard));
