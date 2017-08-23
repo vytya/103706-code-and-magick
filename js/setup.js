@@ -53,9 +53,11 @@ var KEY_CODES = {
   enter: 13
 };
 
+var SIMILAR_WIZARDS_NUMBER = 4;
+
 // Check for hidden class is on block & remove it form block if it exist
-var removeHiddenClass = function (hiddenblock) {
-  var hiddenBlock = document.querySelector(hiddenblock);
+var removeHiddenClass = function (selector) {
+  var hiddenBlock = document.querySelector(selector);
 
   if (hiddenBlock !== null && hiddenBlock.classList.contains('hidden')) {
     hiddenBlock.classList.remove('hidden');
@@ -165,7 +167,7 @@ var renderWizard = function (wizard) {
 // Generate 4 wizards from template & constants
 var fragment = document.createDocumentFragment();
 
-for (var i = 0; i < 4; i++) {
+for (var i = 0; i < SIMILAR_WIZARDS_NUMBER; i++) {
   var wizard = {
     'name': getRandomElementFromArray(NAMES) + ' ' + getRandomElementFromArray(SURNAMES),
     'coatColor': getRandomElementFromArray(COAT_COLORS),
