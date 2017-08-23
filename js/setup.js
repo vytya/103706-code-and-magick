@@ -40,6 +40,14 @@ var EYES_COLORS = [
   'green'
 ];
 
+var FIREBALL_COLORS = [
+  '#ee4830',
+  '#30a8ee',
+  '#5ce6c0',
+  '#e848d5',
+  '#e6e848'
+];
+
 var KEY_CODES = {
   escape: 27,
   enter: 13
@@ -62,13 +70,15 @@ var getRandomElementFromArray = function (array) {
 };
 
 // Fill block with data
-var fillData = function (clonedNode, selector, type, value) {
+var fillData = function (node, selector, type, value) {
   if (type === 'text') {
-    clonedNode.querySelector(selector).textContent = value;
+    node.querySelector(selector).textContent = value;
   } else if (type === 'fill') {
-    clonedNode.querySelector(selector).style.fill = value;
+    node.querySelector(selector).style.fill = value;
+  } else if (type === 'background') {
+    node.querySelector(selector).style.background = value;
   } else {
-    throw new Error('parameter "fill" must be equal to "text" or "fill"');
+    throw new Error('parameter "fill" must be equal to "text", "fill" or "background"');
   }
 };
 
@@ -118,19 +128,24 @@ setupSubmit.addEventListener('keydown', onPopupEnterPress);
 // Skin change
 var setupWizard = document.querySelector('.setup-wizard');
 var setupWizardCoat = setupWizard.querySelector('.wizard-coat');
-var setupWizardEyes = setupWizard.querySelector('.wizard-eyes')
+var setupWizardEyes = setupWizard.querySelector('.wizard-eyes');
+var setupFireball = document.querySelector('.setup-fireball-wrap');
 
 var onPopupChangeWizardCoat = function () {
   fillData(setupWizard, '.wizard-coat', 'fill', getRandomElementFromArray(COAT_COLORS));
 };
 
-setupWizardCoat.addEventListener('click', onPopupChangeWizardCoat);
-
 var onPopupChangeWizardEyes = function () {
   fillData(setupWizard, '.wizard-eyes', 'fill', getRandomElementFromArray(EYES_COLORS));
 };
 
+var onPopupChangeFireballColor = function () {
+  fillData(document, '.setup-fireball-wrap', 'background', getRandomElementFromArray(FIREBALL_COLORS));
+};
+
+setupWizardCoat.addEventListener('click', onPopupChangeWizardCoat);
 setupWizardEyes.addEventListener('click', onPopupChangeWizardEyes);
+setupFireball.addEventListener('click', onPopupChangeFireballColor);
 
 // Template
 var similarListElement = document.querySelector('.setup-similar-list');
