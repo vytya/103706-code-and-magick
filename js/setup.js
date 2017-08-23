@@ -1,21 +1,5 @@
 'use strict';
 
-var removeHiddenClass = function (hiddenblock) {
-  var hiddenBlock = document.querySelector(hiddenblock);
-
-  if (hiddenBlock !== null && hiddenBlock.classList.contains('hidden')) {
-    hiddenBlock.classList.remove('hidden');
-  }
-};
-
-// Random function with min & max from array
-var getMinMaxRandomFromArray = function (array) {
-  return Math.floor(Math.random() * array.length);
-};
-
-// Remove .hidden at .setup
-removeHiddenClass('.setup');
-
 // Constants
 var NAMES = [
   'Иван',
@@ -39,7 +23,7 @@ var SURNAMES = [
   'Ирвинг'
 ];
 
-var COATCOLORS = [
+var COAT_COLORS = [
   'rgb(101, 137, 164)',
   'rgb(241, 43, 107)',
   'rgb(146, 100, 161)',
@@ -48,7 +32,7 @@ var COATCOLORS = [
   'rgb(0, 0, 0)'
 ];
 
-var EYESCOLORS = [
+var EYES_COLORS = [
   'black',
   'red',
   'blue',
@@ -56,18 +40,118 @@ var EYESCOLORS = [
   'green'
 ];
 
+var FIREBALL_COLORS = [
+  '#ee4830',
+  '#30a8ee',
+  '#5ce6c0',
+  '#e848d5',
+  '#e6e848'
+];
+
+var KEY_CODES = {
+  escape: 27,
+  enter: 13
+};
+
+var SIMILAR_WIZARDS_NUMBER = 4;
+
+// Check for hidden class is on block & remove it form block if it exist
+var removeHiddenClass = function (selector) {
+  var hiddenBlock = document.querySelector(selector);
+
+  if (hiddenBlock !== null && hiddenBlock.classList.contains('hidden')) {
+    hiddenBlock.classList.remove('hidden');
+  }
+};
+
+// Random function with min & max from array
+var getRandomElementFromArray = function (array) {
+  var randomElement = Math.floor(Math.random() * array.length);
+
+  return array[randomElement];
+};
+
+// Fill block with data
+var fillData = function (node, selector, type, value) {
+  if (type === 'text') {
+    node.querySelector(selector).textContent = value;
+  } else if (type === 'fill') {
+    node.querySelector(selector).style.fill = value;
+  } else if (type === 'background') {
+    node.querySelector(selector).style.background = value;
+  } else {
+    throw new Error('parameter "fill" must be equal to "text", "fill" or "background"');
+  }
+};
+
+// Open / hide setup
+var setupOpen = document.querySelector('.setup-open');
+var setupClose = document.querySelector('.setup-close');
+var setupSubmit = document.querySelector('.setup-submit');
+var setup = document.querySelector('.setup');
+
+var onPopupEscPress = function (event) {
+  if (event.keyCode === KEY_CODES.escape) {
+    setup.classList.add('hidden');
+  }
+};
+
+var onPopupEnterPress = function (event) {
+  if (event.keyCode === KEY_CODES.enter) {
+    if (setup.classList.contains('hidden')) {
+      setup.classList.remove('hidden');
+    } else {
+      setup.classList.add('hidden');
+    }
+  }
+};
+
+// Open
+var openPopup = function () {
+  setup.classList.remove('hidden');
+
+  document.addEventListener('keydown', onPopupEscPress);
+};
+
+setupOpen.addEventListener('click', openPopup);
+setupOpen.addEventListener('keydown', onPopupEnterPress);
+
+// Close
+var closePopup = function () {
+  setup.classList.add('hidden');
+};
+
+setupClose.addEventListener('click', closePopup);
+setupClose.addEventListener('keydown', onPopupEnterPress);
+
+setupSubmit.addEventListener('click', closePopup);
+setupSubmit.addEventListener('keydown', onPopupEnterPress);
+
+// Skin change
+var setupWizard = document.querySelector('.setup-wizard');
+var setupWizardCoat = setupWizard.querySelector('.wizard-coat');
+var setupWizardEyes = setupWizard.querySelector('.wizard-eyes');
+var setupFireball = document.querySelector('.setup-fireball-wrap');
+
+var onPopupChangeWizardCoat = function () {
+  fillData(setupWizard, '.wizard-coat', 'fill', getRandomElementFromArray(COAT_COLORS));
+};
+
+var onPopupChangeWizardEyes = function () {
+  fillData(setupWizard, '.wizard-eyes', 'fill', getRandomElementFromArray(EYES_COLORS));
+};
+
+var onPopupChangeFireballColor = function () {
+  fillData(document, '.setup-fireball-wrap', 'background', getRandomElementFromArray(FIREBALL_COLORS));
+};
+
+setupWizardCoat.addEventListener('click', onPopupChangeWizardCoat);
+setupWizardEyes.addEventListener('click', onPopupChangeWizardEyes);
+setupFireball.addEventListener('click', onPopupChangeFireballColor);
+
 // Template
 var similarListElement = document.querySelector('.setup-similar-list');
 var similarWizardTemplate = document.querySelector('#similar-wizard-template').content;
-
-// Fill block with data
-var fillData = function (clonedNode, selector, type, value) {
-  if (type === 'text') {
-    clonedNode.querySelector(selector).textContent = value;
-  } else {
-    clonedNode.querySelector(selector).style.fill = value;
-  }
-};
 
 // Render wizard func
 var renderWizard = function (wizard) {
@@ -83,11 +167,11 @@ var renderWizard = function (wizard) {
 // Generate 4 wizards from template & constants
 var fragment = document.createDocumentFragment();
 
-for (var i = 0; i < 4; i++) {
+for (var i = 0; i < SIMILAR_WIZARDS_NUMBER; i++) {
   var wizard = {
-    'name': NAMES[getMinMaxRandomFromArray(NAMES)] + ' ' + SURNAMES[getMinMaxRandomFromArray(SURNAMES)],
-    'coatColor': COATCOLORS[getMinMaxRandomFromArray(COATCOLORS)],
-    'eyesColor': EYESCOLORS[getMinMaxRandomFromArray(EYESCOLORS)]
+    'name': getRandomElementFromArray(NAMES) + ' ' + getRandomElementFromArray(SURNAMES),
+    'coatColor': getRandomElementFromArray(COAT_COLORS),
+    'eyesColor': getRandomElementFromArray(EYES_COLORS)
   };
 
   fragment.appendChild(renderWizard(wizard));
