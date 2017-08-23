@@ -118,12 +118,19 @@ setupSubmit.addEventListener('keydown', onPopupEnterPress);
 // Skin change
 var setupWizard = document.querySelector('.setup-wizard');
 var setupWizardCoat = setupWizard.querySelector('.wizard-coat');
+var setupWizardEyes = setupWizard.querySelector('.wizard-eyes')
 
 var onPopupChangeWizardCoat = function () {
   fillData(setupWizard, '.wizard-coat', 'fill', getRandomElementFromArray(COAT_COLORS));
 };
 
 setupWizardCoat.addEventListener('click', onPopupChangeWizardCoat);
+
+var onPopupChangeWizardEyes = function () {
+  fillData(setupWizard, '.wizard-eyes', 'fill', getRandomElementFromArray(EYES_COLORS));
+};
+
+setupWizardEyes.addEventListener('click', onPopupChangeWizardEyes);
 
 // Template
 var similarListElement = document.querySelector('.setup-similar-list');
