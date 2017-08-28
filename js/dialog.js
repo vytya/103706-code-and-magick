@@ -19,11 +19,7 @@
 
   var onPopupEnterPress = function (event) {
     window.util.isEnterEvent(event, function () {
-      if (setup.classList.contains('hidden')) {
-        setup.classList.remove('hidden');
-      } else {
-        setup.classList.add('hidden');
-      }
+      setup.classList.toggle('hidden');
     });
   };
 
