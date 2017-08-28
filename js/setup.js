@@ -141,15 +141,21 @@
   });
 
   artifactsElements.addEventListener('drop', function (event) {
-    event.target.style.backgroundColor = '';
-    artifactsElements.style.outline = '';
+    if (event.target.innerHTML === '' && event.target.tagName.toLowerCase() === 'div') {
+      event.target.style.backgroundColor = '';
+      artifactsElements.style.outline = '';
 
-    event.target.appendChild(draggedItem);
+      event.target.appendChild(draggedItem);
+    }
+
+    event.preventDefault();
   });
 
   artifactsElements.addEventListener('dragenter', function (event) {
-    event.target.style.backgroundColor = 'yellow';
-    artifactsElements.style.outline = OUTLINE_STYLE;
+    if (event.target.innerHTML === '' && event.target.tagName.toLowerCase() === 'div') {
+      event.target.style.backgroundColor = 'yellow';
+      artifactsElements.style.outline = OUTLINE_STYLE;
+    }
 
     event.preventDefault();
   });
