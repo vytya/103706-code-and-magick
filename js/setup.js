@@ -51,6 +51,8 @@
 
   var SIMILAR_WIZARDS_NUMBER = 4;
 
+  var OUTLINE_STYLE = '2px dashed red';
+
   // Skin change
   var setupWizard = document.querySelector('.setup-wizard');
   var setupWizardCoat = setupWizard.querySelector('.wizard-coat');
@@ -115,4 +117,52 @@
 
   // Remove .hidden at .setup-similar
   window.util.removeHiddenClass('.setup-similar');
+
+  var shopElement = document.querySelector('.setup-artifacts-shop');
+  var draggedItem = null;
+  var artifactsElements = document.querySelector('.setup-artifacts');
+
+  shopElement.addEventListener('dragstart', function (event) {
+    if (event.target.tagName.toLowerCase() === 'img') {
+      var clonedDragElement = event.target.cloneNode(true);
+
+      draggedItem = clonedDragElement;
+
+      event.dataTransfer.setData('text/plain', event.target.alt);
+
+      artifactsElements.style.outline = OUTLINE_STYLE;
+    }
+  });
+
+  artifactsElements.addEventListener('dragover', function (event) {
+    event.preventDefault();
+
+    return false;
+  });
+
+  artifactsElements.addEventListener('drop', function (event) {
+    if (event.target.innerHTML === '' && event.target.tagName.toLowerCase() === 'div') {
+      event.target.style.backgroundColor = '';
+      artifactsElements.style.outline = '';
+
+      event.target.appendChild(draggedItem);
+    }
+
+    event.preventDefault();
+  });
+
+  artifactsElements.addEventListener('dragenter', function (event) {
+    if (event.target.innerHTML === '' && event.target.tagName.toLowerCase() === 'div') {
+      event.target.style.backgroundColor = 'yellow';
+      artifactsElements.style.outline = OUTLINE_STYLE;
+    }
+
+    event.preventDefault();
+  });
+
+  artifactsElements.addEventListener('dragleave', function (event) {
+    event.target.style.backgroundColor = '';
+
+    event.preventDefault();
+  });
 })();
