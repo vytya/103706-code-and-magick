@@ -40,11 +40,11 @@
       selector.textContent = value;
     },
 
-    fillElement: function(element, color) {
+    fillElement: function (element, color) {
       element.style.fill = color;
     },
 
-    changeElementBackground: function(element, color) {
+    changeElementBackground: function (element, color) {
       element.style.backgroundColor = color;
     },
 
