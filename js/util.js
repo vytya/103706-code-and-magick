@@ -36,16 +36,16 @@
     },
 
     // Fill block with data
-    fillData: function (node, selector, type, value) {
-      if (type === 'text') {
-        node.querySelector(selector).textContent = value;
-      } else if (type === 'fill') {
-        node.querySelector(selector).style.fill = value;
-      } else if (type === 'background') {
-        node.querySelector(selector).style.background = value;
-      } else {
-        throw new Error('parameter "fill" must be equal to "text", "fill" or "background"');
-      }
+    fillTextData: function (selector, value) {
+      selector.textContent = value;
+    },
+
+    fillElement: function (element, color) {
+      element.style.fill = color;
+    },
+
+    changeElementBackground: function (element, color) {
+      element.style.backgroundColor = color;
     },
 
     // Fill hidden input data

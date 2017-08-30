@@ -53,31 +53,21 @@
 
   var OUTLINE_STYLE = '2px dashed red';
 
-  // Skin change
-  var setupWizard = document.querySelector('.setup-wizard');
-  var setupWizardCoat = setupWizard.querySelector('.wizard-coat');
-  var setupWizardEyes = setupWizard.querySelector('.wizard-eyes');
-  var setupFireball = document.querySelector('.setup-fireball-wrap');
+  // Skin changes
+  var setupWizardCoat = document.querySelector('.wizard-coat');
+  var setupWizardEyes = document.querySelector('.wizard-eyes');
+  var setupFireball = document.querySelector('.setup-fireball');
 
   var onPopupChangeWizardCoat = function () {
-    var coatColor = window.util.getRandomElementFromArray(COAT_COLORS);
-
-    window.util.fillData(setupWizard, '.wizard-coat', 'fill', coatColor);
-    window.util.fillHiddenInput('input[name="coat-color"]', coatColor);
+    window.colorizeElement(setupWizardCoat, COAT_COLORS, window.util.fillElement);
   };
 
   var onPopupChangeWizardEyes = function () {
-    var eyeColor = window.util.getRandomElementFromArray(EYES_COLORS);
-
-    window.util.fillData(setupWizard, '.wizard-eyes', 'fill', eyeColor);
-    window.util.fillHiddenInput('input[name="eyes-color"]', eyeColor);
+    window.colorizeElement(setupWizardEyes, EYES_COLORS, window.util.fillElement);
   };
 
   var onPopupChangeFireballColor = function () {
-    var fireballColor = window.util.getRandomElementFromArray(FIREBALL_COLORS);
-
-    window.util.fillData(document, '.setup-fireball-wrap', 'background', fireballColor);
-    window.util.fillHiddenInput('input[name="fireball-color"]', fireballColor);
+    window.colorizeElement(setupFireball, FIREBALL_COLORS, window.util.changeElementBackground);
   };
 
   setupWizardCoat.addEventListener('click', onPopupChangeWizardCoat);
@@ -91,10 +81,13 @@
   // Render wizard func
   var renderWizard = function (wizard) {
     var wizardClonedTemplate = similarWizardTemplate.cloneNode(true);
+    var clonedWizardName = wizardClonedTemplate.querySelector('.setup-similar-label');
+    var clonedCoat = wizardClonedTemplate.querySelector('.wizard-coat');
+    var clonedEyes = wizardClonedTemplate.querySelector('.wizard-eyes');
 
-    window.util.fillData(wizardClonedTemplate, '.setup-similar-label', 'text', wizard.name);
-    window.util.fillData(wizardClonedTemplate, '.wizard-coat', 'fill', wizard.coatColor);
-    window.util.fillData(wizardClonedTemplate, '.wizard-eyes', 'fill', wizard.eyesColor);
+    window.util.fillTextData(clonedWizardName, wizard.name);
+    window.colorizeElement(clonedCoat, COAT_COLORS, window.util.fillElement);
+    window.colorizeElement(clonedEyes, EYES_COLORS, window.util.fillElement);
 
     return wizardClonedTemplate;
   };
