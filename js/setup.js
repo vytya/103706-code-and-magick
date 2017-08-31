@@ -1,29 +1,6 @@
 'use strict';
 
 (function () {
-  // Constants
-  var NAMES = [
-    'Иван',
-    'Хуан Себастьян',
-    'Мария',
-    'Кристоф',
-    'Виктор',
-    'Юлия',
-    'Люпита',
-    'Вашингтон'
-  ];
-
-  var SURNAMES = [
-    'да Марья',
-    'Верон',
-    'Мирабелла',
-    'Вальц',
-    'Онопко',
-    'Топольницкая',
-    'Нионго',
-    'Ирвинг'
-  ];
-
   var COAT_COLORS = [
     'rgb(101, 137, 164)',
     'rgb(241, 43, 107)',
@@ -79,34 +56,36 @@
   var similarWizardTemplate = document.querySelector('#similar-wizard-template').content;
 
   // Render wizard func
-  var renderWizard = function (wizard) {
+  var renderWizard = function (data) {
     var wizardClonedTemplate = similarWizardTemplate.cloneNode(true);
     var clonedWizardName = wizardClonedTemplate.querySelector('.setup-similar-label');
     var clonedCoat = wizardClonedTemplate.querySelector('.wizard-coat');
     var clonedEyes = wizardClonedTemplate.querySelector('.wizard-eyes');
 
-    window.util.fillTextData(clonedWizardName, wizard.name);
-    window.colorizeElement(clonedCoat, COAT_COLORS, window.util.fillElement);
-    window.colorizeElement(clonedEyes, EYES_COLORS, window.util.fillElement);
+    window.util.fillTextData(clonedWizardName, data.name);
+    window.colorizeElement(clonedCoat, data.colorCoat, window.util.fillElement);
+    window.colorizeElement(clonedEyes, data.colorEyes, window.util.fillElement);
 
     return wizardClonedTemplate;
   };
 
-  // Generate 4 wizards from template & constants
-  var fragment = document.createDocumentFragment();
+  var onError = function (message) {
+    console.alert(message);
+  };
 
-  for (var i = 0; i < SIMILAR_WIZARDS_NUMBER; i++) {
-    var wizard = {
-      'name': window.util.getRandomElementFromArray(NAMES) + ' ' + window.util.getRandomElementFromArray(SURNAMES),
-      'coatColor': window.util.getRandomElementFromArray(COAT_COLORS),
-      'eyesColor': window.util.getRandomElementFromArray(EYES_COLORS)
-    };
+  var onSuccess = function (data) {
+    // Generate 4 wizards from template & constants
+    var fragment = document.createDocumentFragment();
 
-    fragment.appendChild(renderWizard(wizard));
-  }
+    for (var i = 0; i < SIMILAR_WIZARDS_NUMBER; i++) {
+      fragment.appendChild(renderWizard(data[i]));
+    }
 
-  // Add fragments to HTML
-  similarListElement.appendChild(fragment);
+    // Add fragments to HTML
+    similarListElement.appendChild(fragment);
+  };
+
+  window.backend.load(onSuccess, onError);
 
   // Remove .hidden at .setup-similar
   window.util.removeHiddenClass('.setup-similar');

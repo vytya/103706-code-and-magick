@@ -1,11 +1,17 @@
 'use strict';
 
 (function () {
-  window.colorizeElement = function (selector, array, fillFunction) {
-    var randomArrayElement = window.util.getRandomElementFromArray(array);
+  window.colorizeElement = function (selector, color, fillFunction) {
+    var colorOfElement;
+
+    if (typeof (color) === 'object') {
+      colorOfElement = window.util.getRandomElementFromArray(color);
+    } else {
+      colorOfElement = color;
+    }
 
     if (typeof fillFunction === 'function') {
-      fillFunction(selector, randomArrayElement);
+      fillFunction(selector, colorOfElement);
     }
   };
 }());
