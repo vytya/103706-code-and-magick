@@ -26,8 +26,6 @@
     '#e6e848'
   ];
 
-  var SIMILAR_WIZARDS_NUMBER = 4;
-
   var OUTLINE_STYLE = '2px dashed red';
 
   // Skin changes
@@ -90,7 +88,7 @@
     // Generate 4 wizards from template & constants
     var fragment = document.createDocumentFragment();
 
-    for (var i = 0; i < SIMILAR_WIZARDS_NUMBER; i++) {
+    for (var i = 0; i < 4; i++) {
       fragment.appendChild(renderWizard(data[i]));
     }
 
@@ -153,14 +151,7 @@
   var userDialog = document.querySelector('.setup');
 
   form.addEventListener('submit', function (event) {
-    var formData = new FormData(form);
-    var data = {};
-
-    for (var [key, value] of formData.entries()) {
-      data[key] = value;
-    }
-
-    window.backend.save(data, function () {
+    window.backend.save(new FormData(form), function () {
       userDialog.classList.add('hidden');
     }, onError);
 
