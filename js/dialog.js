@@ -6,8 +6,8 @@
   var setupClose = document.querySelector('.setup-close');
   var setupSubmit = document.querySelector('.setup-submit');
   var setup = document.querySelector('.setup');
-
-  var dialogHandle = setup.querySelector('.setup-user-pic');
+  var avatarUploadInput = setup.querySelector('input[name="avatar"]')
+  var dialogHandle = setup.querySelector('.upload');
   var dialogLeftOffset;
   var dialotTopOffset;
 
@@ -47,9 +47,6 @@
   setupClose.addEventListener('click', closePopup);
   setupClose.addEventListener('keydown', onPopupEnterPress);
 
-  setupSubmit.addEventListener('click', closePopup);
-  setupSubmit.addEventListener('keydown', onPopupEnterPress);
-
   dialogHandle.addEventListener('mousedown', function (event) {
     event.preventDefault();
 
@@ -84,5 +81,9 @@
 
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
+  });
+
+  avatarUploadInput.addEventListener('click', function (event) {
+    event.preventDefault();
   });
 })();
