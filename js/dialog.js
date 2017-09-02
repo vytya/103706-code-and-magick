@@ -4,9 +4,8 @@
   // Open / hide setup
   var setupOpen = document.querySelector('.setup-open');
   var setupClose = document.querySelector('.setup-close');
-  var setupSubmit = document.querySelector('.setup-submit');
   var setup = document.querySelector('.setup');
-  var avatarUploadInput = setup.querySelector('input[name="avatar"]')
+  var avatarUploadInput = setup.querySelector('input[name="avatar"]');
   var dialogHandle = setup.querySelector('.upload');
   var dialogLeftOffset;
   var dialotTopOffset;

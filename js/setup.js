@@ -28,6 +28,8 @@
 
   var OUTLINE_STYLE = '2px dashed red';
 
+  var SIMILAR_WIZARDS_NUMBER = 4;
+
   // Skin changes
   var setupWizardCoat = document.querySelector('.wizard-coat');
   var setupWizardEyes = document.querySelector('.wizard-eyes');
@@ -85,10 +87,11 @@
   };
 
   var onSuccessLoad = function (data) {
-    // Generate 4 wizards from template & constants
     var fragment = document.createDocumentFragment();
 
-    for (var i = 0; i < 4; i++) {
+    data = window.util.getShuffledArray(data);
+
+    for (var i = 0; i < SIMILAR_WIZARDS_NUMBER; i++) {
       fragment.appendChild(renderWizard(data[i]));
     }
 
@@ -122,39 +125,50 @@
   });
 
   artifactsElements.addEventListener('drop', function (event) {
+    event.preventDefault();
+
     if (event.target.innerHTML === '' && event.target.tagName.toLowerCase() === 'div') {
       event.target.style.backgroundColor = '';
       artifactsElements.style.outline = '';
 
       event.target.appendChild(draggedItem);
     }
-
-    event.preventDefault();
   });
 
   artifactsElements.addEventListener('dragenter', function (event) {
+    event.preventDefault();
+
     if (event.target.innerHTML === '' && event.target.tagName.toLowerCase() === 'div') {
       event.target.style.backgroundColor = 'yellow';
       artifactsElements.style.outline = OUTLINE_STYLE;
     }
-
-    event.preventDefault();
   });
 
   artifactsElements.addEventListener('dragleave', function (event) {
-    event.target.style.backgroundColor = '';
-
     event.preventDefault();
+
+    event.target.style.backgroundColor = '';
   });
 
   var form = document.querySelector('.setup-wizard-form');
   var userDialog = document.querySelector('.setup');
 
   form.addEventListener('submit', function (event) {
-    window.backend.save(new FormData(form), function () {
-      userDialog.classList.add('hidden');
-    }, onError);
-
     event.preventDefault();
+
+    var formElements = form.elements;
+    var succefullState = true;
+
+    for (var i = 0; i < formElements.length; i++) {
+      if (!formElements[i].validity.valid) {
+        succefullState = false;
+      }
+    }
+
+    if (succefullState) {
+      window.backend.save(new FormData(form), function () {
+        userDialog.classList.add('hidden');
+      }, onError);
+    }
   });
 })();
