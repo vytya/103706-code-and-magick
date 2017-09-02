@@ -80,7 +80,19 @@
 
   var onError = function (message) {
     var node = document.createElement('div');
-    node.style = 'width: 50%; height: 100px; background-color: red; position: absolute; z-index: 10; top: 50%; left: 50%; transform: translate(-50%,-50%); display: flex; align-items: center; justify-content: center;';
+
+    node.style.width = 50 + '%';
+    node.style.height = 100 + 'px';
+    node.style.backgroundColor = 'red';
+    node.style.position = 'absolute';
+    node.style.zIndex = 10;
+    node.style.top = 50 + '%';
+    node.style.left = 50 + '%';
+    node.style.transform = 'translate(-50%, -50%)';
+    node.style.display = 'flex';
+    node.style.alignItems = 'center';
+    node.style.justifyContent = 'center';
+
     node.textContent = message;
 
     document.body.insertAdjacentElement('afterbegin', node);
@@ -152,20 +164,18 @@
 
   var form = document.querySelector('.setup-wizard-form');
   var userDialog = document.querySelector('.setup');
+  var formValid = true;
+
+  form.addEventListener('invalid', function (event) {
+    event.preventDefault();
+
+    formValid = false;
+  });
 
   form.addEventListener('submit', function (event) {
     event.preventDefault();
 
-    var formElements = form.elements;
-    var succefullState = true;
-
-    for (var i = 0; i < formElements.length; i++) {
-      if (!formElements[i].validity.valid) {
-        succefullState = false;
-      }
-    }
-
-    if (succefullState) {
+    if (formValid) {
       window.backend.save(new FormData(form), function () {
         userDialog.classList.add('hidden');
       }, onError);
