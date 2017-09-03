@@ -164,18 +164,11 @@
 
   var form = document.querySelector('.setup-wizard-form');
   var userDialog = document.querySelector('.setup');
-  var formValid = true;
-
-  form.addEventListener('invalid', function (event) {
-    event.preventDefault();
-
-    formValid = false;
-  });
 
   form.addEventListener('submit', function (event) {
     event.preventDefault();
 
-    if (formValid) {
+    if (form.checkValidity()) {
       window.backend.save(new FormData(form), function () {
         userDialog.classList.add('hidden');
       }, onError);
