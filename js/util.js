@@ -35,6 +35,15 @@
       return array[randomElement];
     },
 
+    // Shuffle array
+    getShuffledArray: function (array) {
+      array.sort(function () {
+        return Math.random() - 0.5;
+      });
+
+      return array;
+    },
+
     // Fill block with data
     fillTextData: function (selector, value) {
       selector.textContent = value;

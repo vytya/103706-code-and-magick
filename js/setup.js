@@ -1,29 +1,6 @@
 'use strict';
 
 (function () {
-  // Constants
-  var NAMES = [
-    'Иван',
-    'Хуан Себастьян',
-    'Мария',
-    'Кристоф',
-    'Виктор',
-    'Юлия',
-    'Люпита',
-    'Вашингтон'
-  ];
-
-  var SURNAMES = [
-    'да Марья',
-    'Верон',
-    'Мирабелла',
-    'Вальц',
-    'Онопко',
-    'Топольницкая',
-    'Нионго',
-    'Ирвинг'
-  ];
-
   var COAT_COLORS = [
     'rgb(101, 137, 164)',
     'rgb(241, 43, 107)',
@@ -49,9 +26,9 @@
     '#e6e848'
   ];
 
-  var SIMILAR_WIZARDS_NUMBER = 4;
-
   var OUTLINE_STYLE = '2px dashed red';
+
+  var SIMILAR_WIZARDS_NUMBER = 4;
 
   // Skin changes
   var setupWizardCoat = document.querySelector('.wizard-coat');
@@ -59,15 +36,24 @@
   var setupFireball = document.querySelector('.setup-fireball');
 
   var onPopupChangeWizardCoat = function () {
-    window.colorizeElement(setupWizardCoat, COAT_COLORS, window.util.fillElement);
+    var coatColor = window.util.getRandomElementFromArray(COAT_COLORS);
+
+    window.colorizeElement(setupWizardCoat, coatColor, window.util.fillElement);
+    window.util.fillHiddenInput('input[name="coat-color"]', coatColor);
   };
 
   var onPopupChangeWizardEyes = function () {
-    window.colorizeElement(setupWizardEyes, EYES_COLORS, window.util.fillElement);
+    var eyesColor = window.util.getRandomElementFromArray(EYES_COLORS);
+
+    window.colorizeElement(setupWizardEyes, eyesColor, window.util.fillElement);
+    window.util.fillHiddenInput('input[name="eyes-color"]', eyesColor);
   };
 
   var onPopupChangeFireballColor = function () {
-    window.colorizeElement(setupFireball, FIREBALL_COLORS, window.util.changeElementBackground);
+    var fireballColor = window.util.getRandomElementFromArray(FIREBALL_COLORS);
+
+    window.colorizeElement(setupFireball, fireballColor, window.util.changeElementBackground);
+    window.util.fillHiddenInput('input[name="fireball-color"]', fireballColor);
   };
 
   setupWizardCoat.addEventListener('click', onPopupChangeWizardCoat);
@@ -79,34 +65,53 @@
   var similarWizardTemplate = document.querySelector('#similar-wizard-template').content;
 
   // Render wizard func
-  var renderWizard = function (wizard) {
+  var renderWizard = function (data) {
     var wizardClonedTemplate = similarWizardTemplate.cloneNode(true);
     var clonedWizardName = wizardClonedTemplate.querySelector('.setup-similar-label');
     var clonedCoat = wizardClonedTemplate.querySelector('.wizard-coat');
     var clonedEyes = wizardClonedTemplate.querySelector('.wizard-eyes');
 
-    window.util.fillTextData(clonedWizardName, wizard.name);
-    window.colorizeElement(clonedCoat, COAT_COLORS, window.util.fillElement);
-    window.colorizeElement(clonedEyes, EYES_COLORS, window.util.fillElement);
+    window.util.fillTextData(clonedWizardName, data.name);
+    window.colorizeElement(clonedCoat, data.colorCoat, window.util.fillElement);
+    window.colorizeElement(clonedEyes, data.colorEyes, window.util.fillElement);
 
     return wizardClonedTemplate;
   };
 
-  // Generate 4 wizards from template & constants
-  var fragment = document.createDocumentFragment();
+  var onError = function (message) {
+    var node = document.createElement('div');
 
-  for (var i = 0; i < SIMILAR_WIZARDS_NUMBER; i++) {
-    var wizard = {
-      'name': window.util.getRandomElementFromArray(NAMES) + ' ' + window.util.getRandomElementFromArray(SURNAMES),
-      'coatColor': window.util.getRandomElementFromArray(COAT_COLORS),
-      'eyesColor': window.util.getRandomElementFromArray(EYES_COLORS)
-    };
+    node.style.width = 50 + '%';
+    node.style.height = 100 + 'px';
+    node.style.backgroundColor = 'red';
+    node.style.position = 'absolute';
+    node.style.zIndex = 10;
+    node.style.top = 50 + '%';
+    node.style.left = 50 + '%';
+    node.style.transform = 'translate(-50%, -50%)';
+    node.style.display = 'flex';
+    node.style.alignItems = 'center';
+    node.style.justifyContent = 'center';
 
-    fragment.appendChild(renderWizard(wizard));
-  }
+    node.textContent = message;
 
-  // Add fragments to HTML
-  similarListElement.appendChild(fragment);
+    document.body.insertAdjacentElement('afterbegin', node);
+  };
+
+  var onSuccessLoad = function (data) {
+    var fragment = document.createDocumentFragment();
+
+    data = window.util.getShuffledArray(data);
+
+    for (var i = 0; i < SIMILAR_WIZARDS_NUMBER; i++) {
+      fragment.appendChild(renderWizard(data[i]));
+    }
+
+    // Add fragments to HTML
+    similarListElement.appendChild(fragment);
+  };
+
+  window.backend.load(onSuccessLoad, onError);
 
   // Remove .hidden at .setup-similar
   window.util.removeHiddenClass('.setup-similar');
@@ -117,9 +122,7 @@
 
   shopElement.addEventListener('dragstart', function (event) {
     if (event.target.tagName.toLowerCase() === 'img') {
-      var clonedDragElement = event.target.cloneNode(true);
-
-      draggedItem = clonedDragElement;
+      draggedItem = event.target.cloneNode(true);
 
       event.dataTransfer.setData('text/plain', event.target.alt);
 
@@ -134,28 +137,41 @@
   });
 
   artifactsElements.addEventListener('drop', function (event) {
+    event.preventDefault();
+
     if (event.target.innerHTML === '' && event.target.tagName.toLowerCase() === 'div') {
       event.target.style.backgroundColor = '';
       artifactsElements.style.outline = '';
 
       event.target.appendChild(draggedItem);
     }
-
-    event.preventDefault();
   });
 
   artifactsElements.addEventListener('dragenter', function (event) {
+    event.preventDefault();
+
     if (event.target.innerHTML === '' && event.target.tagName.toLowerCase() === 'div') {
       event.target.style.backgroundColor = 'yellow';
       artifactsElements.style.outline = OUTLINE_STYLE;
     }
-
-    event.preventDefault();
   });
 
   artifactsElements.addEventListener('dragleave', function (event) {
-    event.target.style.backgroundColor = '';
-
     event.preventDefault();
+
+    event.target.style.backgroundColor = '';
+  });
+
+  var form = document.querySelector('.setup-wizard-form');
+  var userDialog = document.querySelector('.setup');
+
+  form.addEventListener('submit', function (event) {
+    event.preventDefault();
+
+    if (form.checkValidity()) {
+      window.backend.save(new FormData(form), function () {
+        userDialog.classList.add('hidden');
+      }, onError);
+    }
   });
 })();
