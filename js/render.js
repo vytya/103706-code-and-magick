@@ -25,8 +25,6 @@
     var fragment = document.createDocumentFragment();
     var takeNumber = data.length > 4 ? 4 : data.length;
 
-    console.log(takeNumber);
-
     for (var i = 0; i < takeNumber; i++) {
       fragment.appendChild(renderWizard(data[i]));
     }
