@@ -1,6 +1,8 @@
 'use strict';
 
 (function () {
+  var WIZARD_NUMBER = 4;
+
   var similarWizardTemplate = document.querySelector('#similar-wizard-template').content;
 
   // Render wizard func
@@ -23,7 +25,7 @@
     similarListElement.innerHTML = '';
 
     var fragment = document.createDocumentFragment();
-    var takeNumber = data.length > 4 ? 4 : data.length;
+    var takeNumber = data.length > WIZARD_NUMBER ? WIZARD_NUMBER : data.length;
 
     for (var i = 0; i < takeNumber; i++) {
       fragment.appendChild(renderWizard(data[i]));

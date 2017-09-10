@@ -8,6 +8,9 @@
   var getRank = function (wizard) {
     var rank = 0;
 
+    coatColor = (coatColor) ? coatColor : document.querySelector('.wizard-coat').style.fill;
+    eyesColor = (coatColor) ? eyesColor : document.querySelector('.wizard-eyes').style.fill;
+
     if (wizard.colorCoat === coatColor) {
       rank += 2;
     }
