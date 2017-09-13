@@ -6,8 +6,15 @@
   var similarWizardTemplate = document.querySelector('#similar-wizard-template').content;
 
   // Render wizard func
+  var renderWizardArtifacts = function (wizard) {
+    return wizard.artifacts.map(function (it) {
+      return it.name;
+    }).join('<br />');
+  };
+
   var renderWizard = function (wizard) {
     var wizardClonedTemplate = similarWizardTemplate.cloneNode(true);
+    var wizardElement = wizardClonedTemplate.querySelector('.wizard');
     var clonedWizardName = wizardClonedTemplate.querySelector('.setup-similar-label');
     var clonedCoat = wizardClonedTemplate.querySelector('.wizard-coat');
     var clonedEyes = wizardClonedTemplate.querySelector('.wizard-eyes');
@@ -15,6 +22,10 @@
     window.util.fillTextData(clonedWizardName, wizard.name);
     window.colorizeElement(clonedCoat, wizard.colorCoat, window.util.fillElement);
     window.colorizeElement(clonedEyes, wizard.colorEyes, window.util.fillElement);
+
+    window.popup(wizardElement, function () {
+      return renderWizardArtifacts(wizard);
+    });
 
     return wizardClonedTemplate;
   };

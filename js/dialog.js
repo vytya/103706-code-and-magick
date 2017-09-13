@@ -53,8 +53,11 @@
       y: event.clientY
     };
 
+    var dragged = false;
+
     var onMouseMove = function (moveEvent) {
       moveEvent.preventDefault();
+      dragged = true;
 
       var shift = {
         x: startCoords.x - moveEvent.clientX,
@@ -75,6 +78,15 @@
 
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
+
+      if (dragged) {
+        var onClickPreventDefault = function (evt) {
+          evt.preventDefault();
+          dialogHandle.removeEventListener('click', onClickPreventDefault);
+        };
+
+        dialogHandle.addEventListener('click', onClickPreventDefault);
+      }
     };
 
     document.addEventListener('mousemove', onMouseMove);
