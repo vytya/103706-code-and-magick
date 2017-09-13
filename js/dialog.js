@@ -5,7 +5,6 @@
   var setupOpen = document.querySelector('.setup-open');
   var setupClose = document.querySelector('.setup-close');
   var setup = document.querySelector('.setup');
-  var avatarUploadInput = setup.querySelector('input[name="avatar"]');
   var dialogHandle = setup.querySelector('.upload');
   var dialogLeftOffset;
   var dialotTopOffset;
@@ -82,7 +81,4 @@
     document.addEventListener('mouseup', onMouseUp);
   });
 
-  avatarUploadInput.addEventListener('click', function (event) {
-    event.preventDefault();
-  });
 })();
